@@ -1,0 +1,7 @@
+	Donation 102 for $23000.21 is tax deductible
+	Donation 105 for $23400.05 is NOT tax deductible
+	Donation 103 for $ 1400.01 is tax deductible
+	Donation 104 for $   11.11 is NOT tax deductible
+	Donation 106 for $  770.29 is NOT tax deductible
+	Donation 109 for $11770.29 is tax deductible
+	Donation 107 for $121000.00 is tax deductible
