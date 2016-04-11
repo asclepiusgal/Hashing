@@ -29,38 +29,46 @@ public class PrintImpl {
      */
     public PrintWriter generateReport(DonationImpl donationImpl, DonorImpl 
             donorImpl, String[] lineData, PrintWriter fileOut) {
-
-        // process donor report
+        
         for (int i = 0; i < donorImpl.MAXSIZE; i++) {
-            if (donorImpl.donorHashSet[i] != null) {
-                if (donorImpl.donorHashSet[i].getDonorID() == Integer
-                        .parseInt(lineData[0])) {
-                    fileOut.println("Donor " + lineData[0] + ", " + donorImpl
-                            .donorHashSet[i].getFirstName() + " " + donorImpl
-                                    .donorHashSet[i].getLastName());
+            if (donorImpl.donorHashSet[i] != null ) {
+                    if (donorImpl.donorHashSet[i].getDonorID() == Integer
+                            .parseInt(lineData[0])) {
+                        fileOut.println("Donor " + lineData[0] + ", " + donorImpl
+                                .donorHashSet[i].getFirstName() + " " + donorImpl
+                                        .donorHashSet[i].getLastName());
+
+                    }
                 }
-            }
         }
         
-        // process donation report
-        for (int i = 1; i < lineData.length; i++) {    
-            for (int j = 0; j < donationImpl.MAX_SIZE; j++) {
-                if (donationImpl.donationList[j] != null) { 
-                    Iterator<Donation> nodeIterator = donationImpl
-                            .donationList[j].iterator();
-                    while (nodeIterator.hasNext()) {
-                        Donation donationData = nodeIterator.next();
-                        if (donationData.getDonationID() == Integer
-                                .parseInt(lineData[i])) {
-                            fileOut.print("\tDonation " + donationData
-                                    .getDonationID() + " for $");
-                            fileOut.printf("%8.2f is ", donationData.getAmount());
-                            if (donationData.isTaxDeductible() == false) {
-                                fileOut.print("NOT "); // print not tax deductible
-                            } fileOut.print("tax deductible\n");
-                        }   
+            // process report
+        for (int j = 1; j < lineData.length; j++) {
+            boolean found = false;
+            while (found != true) {
+                for (int i = 0; i < donationImpl.MAX_SIZE; i++) {
+                    if (donationImpl.mapEntry[i].getTopReference() != null) {
+                        Iterator<Donation> nodeIterator = donationImpl.mapEntry[i].getTopReference().iterator();
+                        while (nodeIterator.hasNext()) {
+                            Donation donationData = nodeIterator.next();
+                            if (donationData.getDonationID() == Integer
+                                    .parseInt(lineData[j])) {
+                                fileOut.print("\tDonation " + donationData
+                                        .getDonationID() + " for $");
+                                fileOut.printf("%8.2f is ", donationData.getAmount());
+                                if (donationData.isTaxDeductible() == false) {
+                                    fileOut.print("NOT "); // print not tax deductible
+                                }
+                                fileOut.print("tax deductible\n");
+                                found = true;
+                                continue;
+                            }
+                        }
                     }
                 }
             }
-        } return fileOut; } 
+        } 
+return fileOut;
+    }
 }
+    

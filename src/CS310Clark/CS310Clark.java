@@ -11,7 +11,7 @@
  *         donorInput filepath- 'input/donorRequests.txt'  
  * Test 2: filepath- 'input/assn5input5.txt'- test invalid check number  
  *         donorInput filepath- 'input/donorRequests.txt'
- * Test 3: filepath- 'input/assn5input6.txt'- test invalid email address
+ * Test 3: filepath- 'input/assn5input6.txt'- test invalid email address            
  *         donorInput filepath- 'input/donorRequests.txt'
  * Test 4: filepath- 'input/assn5input7.txt'- test donor ID not unique
  *         donorInput filepath- 'input/donorRequests.txt' 
@@ -207,6 +207,9 @@ public class CS310Clark {
             System.exit(1);
         }
         
+        // initialize the MapEntry Donation Impl
+        donationImpl.generateMapEntry();
+        
         // parse input file data
         while (scanFile.hasNext()) {
             String lineData = scanFile.nextLine();
@@ -267,7 +270,9 @@ public class CS310Clark {
         // parse input file data
         while (scanFile.hasNext()) {
             String lineData = scanFile.nextLine();
-            String[] inputLineValues = lineData.split(" ");
+            String[] inputLineValues = lineData.split("\\s+");
+            
+            
             
         // generate report for parsed data input
             fileOut = printImpl.generateReport(donationImpl, donorImpl, 

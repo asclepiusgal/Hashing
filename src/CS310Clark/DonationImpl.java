@@ -15,7 +15,7 @@ import java.util.LinkedList;
  *
  * @author jeannaclark
  */
-public class DonationImpl implements MapEntry {
+public class DonationImpl {
     // define variables
     private int donationID; // unique value
     private int donorID; // unique & match donor.java donorID
@@ -24,13 +24,37 @@ public class DonationImpl implements MapEntry {
     private String date;
     private boolean taxDeductible;
     private int checkNumber;
+    
+    
 
     /**
      * variables defined
      */
     public int MAX_SIZE = 23;
-    LinkedList<Donation>[] donationList = new LinkedList[MAX_SIZE];
-    
+
+    /**
+     * creates an array of map entry data
+     */
+    public MapEntry[] mapEntry = new MapEntry[MAX_SIZE]; // hashcode = key; linkedList ref = value
+
+    /**
+     * creates a new Donation linked list
+     */
+    public LinkedList<Donation> donationList = new LinkedList<Donation>();
+
+    /**
+     * loads the key values and top list references
+     */
+    public void generateMapEntry() {
+        // initialize the MapEntry keys and top references
+        for (int i = 0; i < MAX_SIZE; i++) {
+            LinkedList<Donation> donationList = new LinkedList<Donation>();
+            mapEntry[i] = new MapEntry();    
+            mapEntry[i].setKey(i); // key will be the hashcode
+            mapEntry[i].setTopReference(donationList); // value is the linked list reference
+        }
+    }
+        
     /**
      *
      * @param obj donation object
@@ -38,10 +62,7 @@ public class DonationImpl implements MapEntry {
      * @return returns true if added
      */
     public boolean add(Donation obj, int hashCode) {
-        if (donationList[hashCode] == null) {
-            donationList[hashCode] = new LinkedList();
-        }
-        donationList[hashCode].add(obj);
+        mapEntry[hashCode].getTopReference().add(obj);
         return true;
     }
    
@@ -52,7 +73,7 @@ public class DonationImpl implements MapEntry {
      * @return false if didn't remove
      */
     public boolean remove(int donorId, int hashCode) {
-        Iterator<Donation> nodeIterator = donationList[hashCode].iterator();
+        Iterator<Donation> nodeIterator = mapEntry[hashCode].getTopReference().iterator();
         while (nodeIterator.hasNext()) {
             Donation donationData = nodeIterator.next();
             if (donationData.getDonorID() == donorId) {
@@ -71,7 +92,7 @@ public class DonationImpl implements MapEntry {
      */
     public boolean remove(int donorId, int donationId, int hashCode) {
         boolean removed = false;
-        Iterator<Donation> nodeIterator = donationList[hashCode].iterator();
+        Iterator<Donation> nodeIterator = mapEntry[hashCode].getTopReference().iterator();
         while (nodeIterator.hasNext()) {
             Donation donationData = nodeIterator.next();
             if (donationData.getDonationID() == donationId && 
@@ -91,8 +112,9 @@ public class DonationImpl implements MapEntry {
      */
     public boolean isIdUnique(int donationId) {  
         for (int i = 0; i < MAX_SIZE; i++) {
-            if (donationList[i] != null) {
-                Iterator<Donation> nodeIterator = donationList[i].iterator();
+            if (mapEntry[i].getTopReference() != null) {
+                            
+                Iterator<Donation> nodeIterator = mapEntry[i].getTopReference().iterator();
                 while (nodeIterator.hasNext()) {
                 if (nodeIterator.next().getDonationID() == donationId) {
                     return false;
@@ -109,7 +131,7 @@ public class DonationImpl implements MapEntry {
      * @return returns the donation object
      */
     public Donation getDonation(int index, int hashCode) {
-        return donationList[hashCode].get(index);  
+        return mapEntry[hashCode].getTopReference().get(index);  
     }
 
     // returns the number of donations by donor ID
@@ -121,8 +143,8 @@ public class DonationImpl implements MapEntry {
      */
     public int numberOfDonations(int donorId) {
         int numDonations = 0;
-        for (int i = 0; i < MAX_SIZE && donationList[i] != null; i++) {
-            Iterator<Donation> nodeIterator = donationList[i].iterator();
+        for (int i = 0; i < MAX_SIZE && mapEntry[i].getTopReference() != null; i++) {
+            Iterator<Donation> nodeIterator = mapEntry[i].getTopReference().iterator();
             while (nodeIterator.hasNext()) {
             if (nodeIterator.next().getDonorID() == donorId) {
                 numDonations++;
@@ -138,7 +160,7 @@ public class DonationImpl implements MapEntry {
      * @return returns number of donations
      */
     public int numberOfDonations(int donorId, int hashCode) {
-        Iterator<Donation> nodeIterator = donationList[hashCode].iterator();
+        Iterator<Donation> nodeIterator = mapEntry[hashCode].getTopReference().iterator();
         int count = 0;
         while (nodeIterator.hasNext()) {
             if (nodeIterator.next().getDonorID() == donorId) {
@@ -148,13 +170,13 @@ public class DonationImpl implements MapEntry {
     }
 
     /**
-     * 
+     * validates the check number and removes invalid entries
      */
     public void cleanUp() {
         // validate check number
         for (int i = 0; i < MAX_SIZE; i++) {
-            if (donationList[i] != null) {
-                Iterator<Donation> nodeIterator = donationList[i].iterator();
+            if (mapEntry[i].getTopReference() != null) {
+                Iterator<Donation> nodeIterator = mapEntry[i].getTopReference().iterator();
                 while (nodeIterator.hasNext() && nodeIterator != null) {
                     Donation donation = nodeIterator.next();
                     boolean validCheckNumber = donation.validateCheckNumber

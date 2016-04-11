@@ -122,10 +122,10 @@ public class DonorImpl {
                     System.out.print("\nDonor " + donorId + " removed for invalid "
                             + "email.");
                     
-                    for (int i = 0; i < MAXSIZE && donationImpl.donationList[i] 
+                    for (int i = 0; i < MAXSIZE && donationImpl.mapEntry[i].getTopReference()
                             != null; i++) {
                         Iterator<Donation> nodeIterator = donationImpl
-                                .donationList[i].iterator();
+                                .mapEntry[i].getTopReference().iterator();
                         while (nodeIterator.hasNext() && nodeIterator != null) {
                             Donation donation = nodeIterator.next();
                             if (donation.getDonorID() == donorId) {

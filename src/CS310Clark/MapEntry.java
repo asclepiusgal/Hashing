@@ -8,61 +8,62 @@
 
 package CS310Clark;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author jeannaclark
  */
-public interface MapEntry {
-    
+public class MapEntry {
+ 
+    private int key; // hashcode after modulus
+    private LinkedList<Donation> topReference;// reference to front of linked list
+
     /**
-     *
-     * @param obj donation object 
-     * @param hashCode the donation hashCode value
-     * @return boolean value true if added
+     * constructor
      */
-    boolean add(Donation obj, int hashCode);
+    public MapEntry() {
+    }
 
     /**
      *
-     * @param donorId the donor ID
-     * @param donationId the donation ID
-     * @param hashCode the HashCode calculated from the donation id
-     * @return boolean value true id removed
+     * @param key the hashcode key
+     * @param topReference the reference to the linked list
      */
-    boolean remove(int donorId, int donationId, int hashCode);
+    public MapEntry(int key, LinkedList<Donation> topReference) {
+        this.key = key;
+        this.topReference = topReference;
+    }
 
     /**
      *
-     * @param donationId the donation id
-     * @return boolean value true if id unique
+     * @return returns the key
      */
-    boolean isIdUnique(int donationId);
+    public int getKey() {
+        return key;
+    }
 
     /**
      *
-     * @param index index of array to return
-     * @param hashCode hashcode from the donation id value
-     * @return donation object
+     * @param key the hashcode value
      */
-    Donation getDonation(int index, int hashCode);
+    public void setKey(int key) {
+        this.key = key;
+    }
 
     /**
      *
-     * @param hashCode hashcode from the donation id value
-     * @return returns number of donations
+     * @return returns the reference node
      */
-    int numberOfDonations(int hashCode);
+    public LinkedList<Donation> getTopReference() {
+        return topReference;
+    }
 
     /**
      *
-     * @param donorId donor ID
-     * @param hashCode hashcode for the donation id value
-     * @return returns number of donations
+     * @param topReference the linked list top reference
      */
-    int numberOfDonations(int donorId, int hashCode);
-
-    /**
-     * 
-     */
-    void cleanUp();
+    public void setTopReference(LinkedList<Donation> topReference) {
+        this.topReference = topReference;
+    }
 }
